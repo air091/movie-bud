@@ -36,7 +36,7 @@ export const findUserByEmail = async (email) => {
 export const createUser = async (name, email, role, password) => {
   const insertQuery = `INSERT INTO users (name, email, user_role, password)
                         VALUES ($1, $2, $3, $4)
-                        RETURNING *`;
+                        RETURNING id, name, email, user_role, created_at, updated_at`;
   const client = await pool.connect();
   try {
     await client.query("BEGIN");

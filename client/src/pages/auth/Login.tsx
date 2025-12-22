@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { IUserLoginCredentials } from "../../interfaces/userInterfacecs";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [credentials, setCredentials] = useState<IUserLoginCredentials>({
@@ -7,6 +8,7 @@ const Login = () => {
     password: "",
   });
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const loginAPI = async () => {
     try {
@@ -19,8 +21,8 @@ const Login = () => {
       const data = await response.json();
       if (!response.ok) {
         setError(data.message);
-      } else if (response.ok) {
-        console.log(data);
+      } else {
+        navigate("/");
       }
     } catch (error) {
       console.error(`Login failed: ${error}`);
@@ -74,6 +76,9 @@ const Login = () => {
           Login
         </button>
       </form>
+      <Link to="/register" className="text-blue-500">
+        Register
+      </Link>
     </div>
   );
 };
