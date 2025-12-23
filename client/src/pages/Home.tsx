@@ -1,27 +1,12 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import type { IUser } from "../interfaces/userInterfacecs";
+import { Link } from "react-router-dom";
+import type { IUser } from "../interfaces/userInterfaces";
+import ProfileModal from "../components/client/home-components/ProfileModal";
+import Movies from "../components/client/home-components/Movies";
 
 const Home = () => {
   const [user, setUser] = useState<IUser | null>(null);
-  const navigate = useNavigate();
-
-  const logoutAPI = async () => {
-    try {
-      const response = await fetch("http://localhost:8080/api/auth/logout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-      });
-      if (response.ok) navigate("/");
-    } catch (error) {
-      console.error(`Logout API failed :${error}`);
-    }
-  };
-  const handleLogout = async (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    await logoutAPI();
-  };
+  const [openProfile, setOpenProfile] = useState<boolean>(false);
 
   useEffect(() => {
     const meAPI = async () => {
@@ -39,13 +24,41 @@ const Home = () => {
   }, []);
 
   return (
-    <div>
-      <header>
-        <p>Welcome, {user ? user.name : ""}</p>
-      </header>
-      <button onClick={handleLogout} className="block border">
-        Logout
-      </button>
+    <div className="max-w-720 min-w-desktop-standard">
+      <div className="border">
+        <header className="flex justify-between py-2 px-4 border">
+          <h1>MoviBud</h1>
+          <div className="flex gap-x-4">
+            <span>
+              Welcome,{" "}
+              {user ? (
+                <div className="relative inline-block">
+                  <span
+                    className="cursor-pointer"
+                    onClick={() => setOpenProfile((prev) => !prev)}
+                  >
+                    {user.name}
+                  </span>
+                  {openProfile && <ProfileModal />}
+                </div>
+              ) : (
+                ""
+              )}
+            </span>
+
+            {user?.user_role === "admin" ? (
+              <Link to="/admin" className="text-blue-500">
+                Go to admin
+              </Link>
+            ) : null}
+          </div>
+        </header>
+
+        {/****** MOVIES ******/}
+        <main className="border px-4">
+          <Movies />
+        </main>
+      </div>
     </div>
   );
 };

@@ -37,7 +37,7 @@ export const postMovie = async (request, response) => {
       duration,
       genres,
       posterUrl,
-      request.user.id
+      request.user.id,
     );
     return response.status(201).json({
       status: "success",
@@ -53,7 +53,6 @@ export const postMovie = async (request, response) => {
 export const putMovie = async (request, response) => {
   try {
     const { id } = request.params;
-    const { title, overview, duration, genres, posterUrl } = request.body;
 
     // check if the  user is admin
     const user = await findUserById(request.user.id);
@@ -63,11 +62,7 @@ export const putMovie = async (request, response) => {
         .json({ status: "failed", message: "User not authorized" });
 
     const movie = await updateMovie(id, {
-      title,
-      overview,
-      duration,
-      genres,
-      posterUrl,
+      ...request.body,
       updatedBy: request.user.id,
     });
     if (!movie)

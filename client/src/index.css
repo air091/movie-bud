@@ -1,1 +1,5 @@
 @import "tailwindcss";
+
+@theme {
+    --width-desktop-standard: 1920px;
+}

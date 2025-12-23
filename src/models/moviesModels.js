@@ -17,10 +17,10 @@ export const createMovie = async (
   duration,
   genres,
   posterUrl,
-  createdBy
+  createdBy,
 ) => {
   const insertQuery = `INSERT INTO movies (title, overview, duration, genres, poster_url, created_by)
-                      VALUES ($1, $2, $3, $4, $5)
+                      VALUES ($1, $2, $3, $4, $5, $6)
                       RETURNING *`;
   const client = await pool.connect();
   try {
